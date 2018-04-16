@@ -65,7 +65,7 @@ int main() {
 	int yMax, xMax;
 	getmaxyx(stdscr, yMax, xMax);
 	//creating input window
-	WINDOW *inputwin = newwin(3, xMax-12, yMax-5, 5);
+	WINDOW *inputwin = newwin(6, xMax-12, yMax-8, 5);
 	box(inputwin, 0, 0);
 	refresh();
 	char hor = '|';
@@ -79,11 +79,46 @@ int main() {
 	wrefresh(inputwin);
 	int a = wgetch(inputwin);
 	if (a == '1'){
+		start_color();
 		init_pair(2, COLOR_CYAN, COLOR_BLACK);
 		attron(COLOR_PAIR(2));
 		mvwprintw(inputwin, 1, 1, "--------WARNING: Potential Hardware Failure May Be Experienced When Using This Program. System Ready, Please Stand Back As Your Computer Is Stressed To Its Limit.---------");
 		wrefresh(inputwin);
 	}
+	endwin();
+	//using arrow keys for menu
+	keypad(inputwin, true);
+	string choices[4] = {"A", "B", "C", "D"};
+	int choice;
+	int highlight = 0;
+	while(1){
+		for(int i = 0; i < 4; i++){
+			if(i == highlight) 
+				wattron(inputwin, A_REVERSE); //attrib on for specific window, color reverse
+			mvwprintw(inputwin, i+1, 1, choices[i].c_str()); //moving throughout menu, (i+1) and x=1, to prevent border fall off left. print our choice last param.
+			wattroff(inputwin, A_REVERSE); //if choice highlighted, print what we want then this line turns it off
+		}
+		choice = wgetch(inputwin); //for user choice
+		switch(choice){ //to see what they entered instead of ifs
+			case KEY_UP:
+				highlight--; 
+				if(highlight == -1){ //out of bounds check
+					highlight = 0;
+				break;
+				}
+			case KEY_DOWN:
+				highlight++;
+				if(highlight == 4){ //bottom checking 0,1,2,3
+					highlight = 3;
+				break;
+				}
+			default: //if user doesnt do above 2 cases
+				break;
+		}
+		if(choice == 10) //user has entered then
+			break;
+	}
+	printw(" Choice selected: %s", choices[highlight].c_str());
 	/* returns cursor position of specified window
 	noecho();
 	cbreak();
