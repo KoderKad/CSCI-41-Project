@@ -1,5 +1,6 @@
 #include <iostream>
-//#include <queue>
+#include <vector>
+#include <cmath>
 #include <algorithm>
 #include <ncurses.h>
 #include <curses.h>
@@ -10,10 +11,7 @@ void die() {
 	exit(1);
 }
 
-
-
 int main() {
-	
 	cout << "Welcome to our Role Playing Game" << endl; //intro
 	cout << "This section was created by Kehardip Dhillon." << endl;
 	cout << "If you would like to play the game, please input any valid letter." << endl;
@@ -24,7 +22,6 @@ int main() {
 	cout << "---Press any letter to continue---" << endl;
 	cin >> q;
 	if (!cin) die();
-
 	
 	//initscr(); //intializes the screen and sets up memory/clears screen
 	//refresh(); //refreshes the screen to match whats in memory
@@ -33,20 +30,35 @@ int main() {
 	//move(y, x); //moves the cursor to the specified location, y first. Moves lines based on value.
 	//clear(); //clears the screen, takes no parameter.
 	//WINDOW * ; //variable type which is a pointer
-	//box() //creates border box (win, 1, 1); ints represent height and width (2 sides each) of square.
+	//box() //basic border, creates border box (win, 1, 1); ints represent height and width (2 sides each) of square.
+	//wborder(win, left, right, top, bottom, tlc, blc, brc); //creates a more customizable border
 	//wrefresh //refreshes window we made
 	//wprintw //takes 2 param, a window and a const char*. Can we used to output to box
 	//cbreak(); //control c ends ncurses program
 	//raw(); //takes in all input, not special characters. so using cntrl C wouldn't crash program. but would be typed out
-	//noecho(); //whatever user inputs, doesn't get inputed to screen.
-	//
-	//
-		
-
-
-
+	//noecho(); //whatever user inputs, doesn't get outputed to screen.
+	/* -Changing color and font of text:
+	// A_NORMAL A_STANDOUT A_REVERSE A_BLINK A_DIM A_BOLD A_PROTECT A_INVIS A_ALTCHARSET A_CHARTEXT
+	// COLOR_PAIR(n) COLOR_NameOfColor(CAPS) Black,Red,Green,Yellow,Blue,Magenta,Cyan,White
+	//attron(); //attribute on, add parameter from list above, then printw("text");
+	//attroff(); //attribute off for text from list above, to turn off feature if using attron() first.
+	//init_pair(); //use to create color pairs. for ex. init_pair(1, COLOR_CYAN, COLOR_WHITE); could be used through attron(COLOR_PAIR(1); then printw(text); for implementation.
+	-example code-
+	start_color();
+	init_pair(1, COLOR_CYAN, COLOR_WHITE); //color range is 0-999, so could be init_pair(1, 0-999, 0-999), 0-999; not all terminals can do this though. There is a code check you can complete to check.
+	attron(A_STANDOUT);
+	printw("cool");
+	attroff(A_STANDOUT);
+	getch();
+	endwin();
+	} */
 
 	initscr();
+	start_color(); //to start color functionality.
+	init_pair(1, COLOR_CYAN, COLOR_BLACK); //creating color pair
+	attron(COLOR_PAIR(1));
+	printw("hello");
+	
 	int height, width, start_y, start_x;
 	height = 10; //10 lines
 	width = 20;
@@ -54,21 +66,26 @@ int main() {
 	start_x = 10;
 	WINDOW *win = newwin(height, width, start_y, start_x); //creates a new window which takes 4 parameters
 	refresh();
-	char border = '-'; //used to set border design of box.
-	box(win, (int)border, (int)border); //window, and 2 integer values as parameters, working in memory, but not being outputed until you refresh screen.
-	mvwprintw(win, 1, 1, "this is my box"); // window relative, so will be outputed to the (0,0) location of current box.
+    //simple border below, went with a complex wborder version
+//	box(win, (int)border, (int)border); //window, and 2 integer values as parameters, working in memory, but not being outputed until you refresh screen.
+	char horizontal = '='; //used to set border design of box.
+	char vertical = '=';
+	char corners = '+';
+	int left, right, top, bottom, tlc, trc, blc, brc; //declaring window border variables
+	left = right = (int)horizontal;
+	top = bottom = (int)vertical;
+	tlc = trc = blc = brc = (int)corners;
+	wborder(win, left, right, top, bottom, tlc, trc, blc, brc);
+	mvwprintw(win, 1, 1, "this is my box"); // window relative, so will be outputed to the (y,x) location of current box.
 	wrefresh(win); //refreshes to make box line above visible
 	int wait = getch(); //wait will be used for waiting for input
+	
 
+	getch();
 	getch();
 
 
-
-
-
 	endwin();
-
-
 
 	return 0;
 }
