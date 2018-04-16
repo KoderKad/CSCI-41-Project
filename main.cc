@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <string>
 #include <cmath>
 #include <algorithm>
 #include <ncurses.h>
@@ -131,6 +132,7 @@ int main() {
 	//getyx(stdscr[standard window we do everything in], y, x); //will take declared variables and puts them into y and x
 	cout << "If you would like to play the game, please input any valid letter." << endl;
 	cout << "---INSTRUCTIONS---" << endl; //spit out how to play the game
+	cout << "Use the arrow keys to navigate menus, press enter to select options" << endl;
 	cout << "---Press any letter to continue---" << endl;
 	char q = 0;
 	cin >> q;
