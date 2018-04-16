@@ -12,17 +12,6 @@ void die() {
 }
 
 int main() {
-	cout << "Welcome to our Role Playing Game" << endl; //intro
-	cout << "This section was created by Kehardip Dhillon." << endl;
-	cout << "If you would like to play the game, please input any valid letter." << endl;
-	char q = 0;
-	cin >> q;
-	if (!cin) die();
-	cout << "---INSTRUCTIONS---" << endl; //spit out how to play the game
-	cout << "---Press any letter to continue---" << endl;
-	cin >> q;
-	if (!cin) die();
-	
 	//initscr(); //intializes the screen and sets up memory/clears screen
 	//refresh(); //refreshes the screen to match whats in memory
 	//getch(); //waits for user input, return int value of key
@@ -52,13 +41,63 @@ int main() {
 	getch();
 	endwin();
 	} */
+	//getxyz(); //gets current position of cursor
+	//getbegyx(); //gets top left corner (y,x) coordinate of specified window
+	//getmaxyx(); //gives height and width of window
+	//getyx(stdscr[standard window we do everything in], y, x); //will take declared variables and puts them into y and x
+	cout << "If you would like to play the game, please input any valid letter." << endl;
+	cout << "---INSTRUCTIONS---" << endl; //spit out how to play the game
+	cout << "---Press any letter to continue---" << endl;
+	char q = 0;
+	cin >> q;
+	if (!cin) die();
+
 
 	initscr();
+	noecho(); //hides input
+	cbreak(); //control c ends program
 	start_color(); //to start color functionality.
 	init_pair(1, COLOR_CYAN, COLOR_BLACK); //creating color pair
 	attron(COLOR_PAIR(1));
-	printw("hello");
-	
+	printw("Welcome to our CSCI-41 Group Project. ");
+	printw("Graphics were created by Kehardip Dhillon, and Data Structure Implementation was done by Abdullah Qarni.");
+	//get screen size
+	int yMax, xMax;
+	getmaxyx(stdscr, yMax, xMax);
+	//creating input window
+	WINDOW *inputwin = newwin(3, xMax-12, yMax-5, 5);
+	box(inputwin, 0, 0);
+	refresh();
+	char hor = '|';
+	char ver = '_';
+	char cor = '_';
+	int le, ri, to, bo, tl, tr, bl, br;
+	le = ri = (int)hor;
+	to = bo = (int)ver;
+	tl = tr = bl = br = (int)cor;
+	wborder(inputwin, le, ri, to, bo, tl, tr, bl, br);
+	wrefresh(inputwin);
+	int a = wgetch(inputwin);
+	if (a == '1'){
+		init_pair(2, COLOR_CYAN, COLOR_BLACK);
+		attron(COLOR_PAIR(2));
+		mvwprintw(inputwin, 1, 1, "--------WARNING: Potential Hardware Failure May Be Experienced When Using This Program. System Ready, Please Stand Back As Your Computer Is Stressed To Its Limit.---------");
+		wrefresh(inputwin);
+	}
+	/* returns cursor position of specified window
+	noecho();
+	cbreak();
+	int y, x, yBegin, xBegin, yMax, xMax;
+	WINDOW *win1 = newwin(30, 30, 30, 30);
+	getyx(stdscr, y, x);
+	getbegyx(stdscr, yBegin, xBegin);
+	getmaxyx(stdscr, yMax, xMax);
+	mvprintw(yMax/2,xMax/2, "%d %d", yBegin, xBegin); //%d decimal value, Max/2 is half the screen.
+	getch();
+	endwin();
+	return 0;
+	}*/
+
 	int height, width, start_y, start_x;
 	height = 10; //10 lines
 	width = 20;
@@ -66,7 +105,7 @@ int main() {
 	start_x = 10;
 	WINDOW *win = newwin(height, width, start_y, start_x); //creates a new window which takes 4 parameters
 	refresh();
-    //simple border below, went with a complex wborder version
+	//simple border below, went with a complex wborder version
 //	box(win, (int)border, (int)border); //window, and 2 integer values as parameters, working in memory, but not being outputed until you refresh screen.
 	char horizontal = '='; //used to set border design of box.
 	char vertical = '=';
@@ -79,10 +118,10 @@ int main() {
 	mvwprintw(win, 1, 1, "this is my box"); // window relative, so will be outputed to the (y,x) location of current box.
 	wrefresh(win); //refreshes to make box line above visible
 	int wait = getch(); //wait will be used for waiting for input
-	
+
 
 	getch();
-	getch();
+	getch(); //makes sure program waits before ending.
 
 
 	endwin();
